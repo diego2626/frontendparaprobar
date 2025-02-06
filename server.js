@@ -1,16 +1,22 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 const app = express();
 
-// Servir archivos estáticos de la carpeta 'dist'
+// Necesitas obtener el nombre del directorio en un módulo ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Servir los archivos estáticos generados por Vue.js
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Redirigir todas las rutas a 'index.html' (para Vue Router en modo history)
+// Rutas para manejar las solicitudes a tu aplicación
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-// Configurar el puerto en el que debe correr
+// Configurar el puerto dinámico de Azure
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
